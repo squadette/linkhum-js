@@ -2,7 +2,7 @@
 
 var XRegExp = require('xregexp');
 
-var url_regex = XRegExp('(?<url>https?://\\S+)');
+var url_regex = XRegExp('\\b(?<url>https?://\\S+)');
 
 exports.intermediate_from_text = function (text) {
     var ichunks = [];

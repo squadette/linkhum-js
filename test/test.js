@@ -10,6 +10,10 @@ describe('linkhum-js', function () {
             should(linkhum.intermediate_from_text("foo")).be.deepEqual([ { text: "foo" } ]);
         });
 
+        it("should parse empty string", function () {
+            should(linkhum.intermediate_from_text("")).be.deepEqual([ { text: "" } ]);
+        });
+
         it ("should parse simple URL as such", function () {
             should(linkhum.intermediate_from_text("https://github.com/")).be.deepEqual([ { text: "https://github.com/",
                                                                                            href: "https://github.com/" } ]);
@@ -20,6 +24,10 @@ describe('linkhum-js', function () {
                                                                                                  { text: "https://github.com/",
                                                                                                    href: "https://github.com/" },
                                                                                                  { text: " bar" }]);
+        });
+
+        it ("should not detect URL with no space", function () {
+            should(linkhum.intermediate_from_text("foohttps://github.com/")).be.deepEqual([ { text: "foohttps://github.com/" } ]);
         });
     });
 });
