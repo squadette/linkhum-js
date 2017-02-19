@@ -2,11 +2,20 @@
 
 var XRegExp = require('xregexp');
 
-var url_regex = XRegExp('\\b(?<url>https?://\\S+)', 'i');
+var url_regex = XRegExp('\\b(?<url>[hH][tT][tT][pP][sS]?://\\S+)');
 var punctuation_regex = XRegExp('[^\\P{Punctuation}#/&-]*$', 'u');
 
 function Linkhum(options) {
+    var opt = options || {};
 
+    this._specials = opt.specials || {};
+    this._special_names = Object.keys(this._specials);
+
+    var that = this;
+    var regexes = [url_regex].concat(this._special_names.map(function (name) {
+        return XRegExp(that._specials[name].regexp);
+    }));
+    this._combined_regex = XRegExp.union(regexes);
 }
 
 Linkhum.prototype.intermediate_from_text = function (text) {
@@ -14,7 +23,8 @@ Linkhum.prototype.intermediate_from_text = function (text) {
 
     var current_index = 0;
     var extra_punct = "";
-    XRegExp.forEach(text, url_regex, function (match, i) {
+    var that = this;
+    XRegExp.forEach(text, this._combined_regex, function (match, i) {
         var previous_text = extra_punct + text.substring(current_index, match.index - current_index);
         if (previous_text) {
             ichunks.push({ text: previous_text });
@@ -49,6 +59,11 @@ Linkhum.prototype.intermediate_from_text = function (text) {
                 ichunks.push({ text: match.url, href: match.url });
             }
         } else {
+            for (var i = 0; i < that._special_names.length; i++) {
+                var special_name = that._special_names[i];
+
+                ichunks.push(that._specials[special_name].formatter(match));
+            }
             extra_punct = "";
         }
         current_index = match.index + match[0].length;

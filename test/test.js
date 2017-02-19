@@ -135,4 +135,19 @@ describe('linkhum-js', function () {
             should(linkhum.intermediate_from_text("URL with parens in parens (such as https://en.wikipedia.org/wiki/Hours_(2013_film)) is also ok")).be.deepEqual(expected);
         });
     });
+
+    describe("micro-syntax", function () {
+        var linkhum = new Linkhum({ specials: { xkcd: { regexp: '\\b(?<xkcd>xkcd:(?<xkcd_number>\\d+))\\b',
+                                                        formatter: function (match) {
+                                                            return { text: match[0],
+                                                                     href: "https://xkcd.com/" + match.xkcd_number + "/",
+                                                            };
+                                                        }
+            } } } );
+
+        it("handles simple micro-syntax", function () {
+            var expected = [ { text: "Micro-syntax for XCKD: " }, { text: "xkcd:505", href: "https://xkcd.com/505/" } ];
+            should(linkhum.intermediate_from_text("Micro-syntax for XCKD: xkcd:505")).be.deepEqual(expected);
+        });
+    });
 });
