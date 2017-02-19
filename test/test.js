@@ -9,5 +9,17 @@ describe('linkhum-js', function () {
         it("should return array of hashes for simple text string", function () {
             should(linkhum.intermediate_from_text("foo")).be.deepEqual([ { text: "foo" } ]);
         });
+
+        it ("should parse simple URL as such", function () {
+            should(linkhum.intermediate_from_text("https://github.com/")).be.deepEqual([ { text: "https://github.com/",
+                                                                                           href: "https://github.com/" } ]);
+        });
+
+        it ("should parse simple URL within text", function () {
+            should(linkhum.intermediate_from_text("foo https://github.com/ bar")).be.deepEqual([ { text: "foo " },
+                                                                                                 { text: "https://github.com/",
+                                                                                                   href: "https://github.com/" },
+                                                                                                 { text: " bar" }]);
+        });
     });
 });
