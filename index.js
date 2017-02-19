@@ -2,7 +2,7 @@
 
 var XRegExp = require('xregexp');
 
-var url_regex = XRegExp('\\b(?<url>https?://\\S+)');
+var url_regex = XRegExp('\\b(?<url>https?://\\S+)', 'i');
 var punctuation_regex = XRegExp('[^\\P{Punctuation}#/&-]*$', 'u');
 
 exports.intermediate_from_text = function (text) {

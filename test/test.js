@@ -29,6 +29,15 @@ describe('linkhum-js', function () {
         it("should not detect URL with no space", function () {
             should(linkhum.intermediate_from_text("foohttps://github.com/")).be.deepEqual([ { text: "foohttps://github.com/" } ]);
         });
+
+        it ("should ignore http:// w/o URL", function () {
+            should(linkhum.intermediate_from_text("should ignore http:// w/o URL")).be.deepEqual([ { text: "should ignore http:// w/o URL" } ]);
+        });
+
+        it ("should handle upper-case scheme", function () { // TODO: lowercase scheme in href part
+            should(linkhum.intermediate_from_text("HTTP://GOOGLE.COM/")).be.deepEqual([ { text: "HTTP://GOOGLE.COM/",
+                                                                                          href: "HTTP://GOOGLE.COM/" }]);
+        });
     });
 
     describe("#intermediate_from_text(), URLs with simple punctuation", function () {
