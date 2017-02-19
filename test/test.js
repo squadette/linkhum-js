@@ -2,10 +2,12 @@
 
 var should = require('should');
 
-var linkhum = require('../index');
+var Linkhum = require('../index');
 
 describe('linkhum-js', function () {
     describe('#intermediate_from_text(), basics', function () {
+        var linkhum = new Linkhum();
+
         it("should return array of hashes for simple text string", function () {
             should(linkhum.intermediate_from_text("foo")).be.deepEqual([ { text: "foo" } ]);
         });
@@ -41,6 +43,8 @@ describe('linkhum-js', function () {
     });
 
     describe("#intermediate_from_text(), URLs with simple punctuation", function () {
+        var linkhum = new Linkhum();
+
         it("question mark", function () {
             var expected = [ { text: "have you read " }, { text: "https://en.wikipedia.org/wiki/Punctuation",
                                                            href: "https://en.wikipedia.org/wiki/Punctuation" }, { text: "?" } ];
@@ -96,6 +100,8 @@ describe('linkhum-js', function () {
     });
 
     describe("#intermediate_from_text(), URLs surrounded by punctuation", function () {
+        var linkhum = new Linkhum();
+
         it("quotes", function () {
             var expected = [ { text: 'For searching you can use so called "' }, { text: "https://google.com/",
                                                                                   href: "https://google.com/" }, { text: '"' } ];

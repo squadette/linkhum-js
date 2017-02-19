@@ -1,11 +1,15 @@
-// -*- mode: web -*-
+'use strict'; // -*- mode: web -*-
 
 var XRegExp = require('xregexp');
 
 var url_regex = XRegExp('\\b(?<url>https?://\\S+)', 'i');
 var punctuation_regex = XRegExp('[^\\P{Punctuation}#/&-]*$', 'u');
 
-exports.intermediate_from_text = function (text) {
+function Linkhum(options) {
+
+}
+
+Linkhum.prototype.intermediate_from_text = function (text) {
     var ichunks = [];
 
     var current_index = 0;
@@ -56,3 +60,5 @@ exports.intermediate_from_text = function (text) {
 
     return ichunks;
 };
+
+module.exports = Linkhum;
