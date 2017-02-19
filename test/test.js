@@ -94,19 +94,30 @@ describe('linkhum-js', function () {
             should(linkhum.intermediate_from_text('For searching you can use so called "https://google.com/"')).be.deepEqual(expected);
         });
 
-        it("parentheses", function () {
+        it("parens around URL", function () {
 
             var expected = [ { text: 'You can put URLs in parens as usual (' },
                              { text: "https://www.youtube.com/watch?v=P9zYSBK7Blw",
                                href: "https://www.youtube.com/watch?v=P9zYSBK7Blw" }, { text: ")" } ];
 
             should(linkhum.intermediate_from_text('You can put URLs in parens as usual (https://www.youtube.com/watch?v=P9zYSBK7Blw)')).be.deepEqual(expected);
+        });
 
-            var expected2 = [ { text: "Parens as part of URL are handled correctly: " },
-                              { text: "https://en.wikipedia.org/wiki/Hours_(2013_film)",
-                                href: "https://en.wikipedia.org/wiki/Hours_(2013_film)" } ];
+        it("URL containing parens", function () {
+            var expected = [ { text: "Parens as part of URL are handled correctly: " },
+                             { text: "https://en.wikipedia.org/wiki/Hours_(2013_film)",
+                               href: "https://en.wikipedia.org/wiki/Hours_(2013_film)" } ];
 
-            should(linkhum.intermediate_from_text("Parens as part of URL are handled correctly: https://en.wikipedia.org/wiki/Hours_(2013_film)")).be.deepEqual(expected2);
+            should(linkhum.intermediate_from_text("Parens as part of URL are handled correctly: https://en.wikipedia.org/wiki/Hours_(2013_film)")).be.deepEqual(expected);
+        });
+
+        it("parens around URL containing parens", function () {
+            var expected = [ { text: "URL with parens in parens (such as " },
+                             { text: "https://en.wikipedia.org/wiki/Hours_(2013_film)",
+                               href: "https://en.wikipedia.org/wiki/Hours_(2013_film)" },
+                             { text: ") is also ok" } ];
+
+            should(linkhum.intermediate_from_text("URL with parens in parens (such as https://en.wikipedia.org/wiki/Hours_(2013_film)) is also ok")).be.deepEqual(expected);
         });
     });
 });
