@@ -136,18 +136,38 @@ describe('linkhum-js', function () {
         });
     });
 
+    var xkcd_microsyntax = { regexp: '\\b(?<xkcd>xkcd:(?<xkcd_number>\\d+))\\b',
+                             formatter: function (match) {
+                                 return { text: match[0],
+                                          href: "https://xkcd.com/" + match.xkcd_number + "/",
+                                 };
+                             },
+    };
+
+    var rfc_microsyntax = { regexp: '\\b(?<rfc>RFC (?<rfc_number>\\d+))\\b',
+                            formatter: function (match) {
+                                return { text: match[0],
+                                         href: "https://tools.ietf.org/html/"+ match.rfc_number,
+                                };
+                            },
+    };
+
     describe("micro-syntax", function () {
-        var linkhum = new Linkhum({ specials: { xkcd: { regexp: '\\b(?<xkcd>xkcd:(?<xkcd_number>\\d+))\\b',
-                                                        formatter: function (match) {
-                                                            return { text: match[0],
-                                                                     href: "https://xkcd.com/" + match.xkcd_number + "/",
-                                                            };
-                                                        }
-            } } } );
+        var linkhum = new Linkhum({ specials: { xkcd: xkcd_microsyntax } } );
 
         it("handles simple micro-syntax", function () {
-            var expected = [ { text: "Micro-syntax for XCKD: " }, { text: "xkcd:505", href: "https://xkcd.com/505/" } ];
-            should(linkhum.intermediate_from_text("Micro-syntax for XCKD: xkcd:505")).be.deepEqual(expected);
+            var expected = [ { text: "Micro-syntax for XCKD: " }, { text: "xkcd:505", href: "https://xkcd.com/505/" },
+                             { text: ", right?" } ];
+            should(linkhum.intermediate_from_text("Micro-syntax for XCKD: xkcd:505, right?")).be.deepEqual(expected);
+        });
+
+        var linkhum2 = new Linkhum({ specials: { xkcd: xkcd_microsyntax, rfc: rfc_microsyntax } });
+
+        it("handles many micro-syntaxes", function () {
+            var expected = [ { text: "a " }, { text: "xkcd:505", href: "https://xkcd.com/505/" },
+            { text: " b " }, { text: "RFC 2616", href: "https://tools.ietf.org/html/2616" }, { text: " c" } ];
+
+            should(linkhum2.intermediate_from_text("a xkcd:505 b RFC 2616 c")).be.deepEqual(expected);
         });
     });
 });

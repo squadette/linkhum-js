@@ -25,7 +25,7 @@ Linkhum.prototype.intermediate_from_text = function (text) {
     var extra_punct = "";
     var that = this;
     XRegExp.forEach(text, this._combined_regex, function (match, i) {
-        var previous_text = extra_punct + text.substring(current_index, match.index - current_index);
+        var previous_text = extra_punct + text.substr(current_index, match.index - current_index);
         if (previous_text) {
             ichunks.push({ text: previous_text });
         }
@@ -33,7 +33,7 @@ Linkhum.prototype.intermediate_from_text = function (text) {
         if (match.url) {
             extra_punct = XRegExp.match(match.url, punctuation_regex);
             if (extra_punct) {
-                var url_no_punctuation = match.url.substring(0, match.url.length - extra_punct.length);
+                var url_no_punctuation = match.url.substr(0, match.url.length - extra_punct.length);
                 var unbalanced_part = "";
                 for (var i = 0; i < url_no_punctuation.length; i++) {
                     switch (url_no_punctuation[i]) {
@@ -43,15 +43,15 @@ Linkhum.prototype.intermediate_from_text = function (text) {
 
                         case ')':
                             if (unbalanced_part[0] === ")") {
-                                unbalanced_part = unbalanced_part.substring(1);
+                                unbalanced_part = unbalanced_part.substr(1);
                             }
                             break;
                     }
                 }
                 if (unbalanced_part) {
-                    if (unbalanced_part === extra_punct.substring(0, unbalanced_part.length)) {
+                    if (unbalanced_part === extra_punct.substr(0, unbalanced_part.length)) {
                         url_no_punctuation += unbalanced_part;
-                        extra_punct = extra_punct.substring(unbalanced_part.length);
+                        extra_punct = extra_punct.substr(unbalanced_part.length);
                     }
                 }
                 ichunks.push({ text: url_no_punctuation, href: url_no_punctuation });
@@ -61,14 +61,16 @@ Linkhum.prototype.intermediate_from_text = function (text) {
         } else {
             for (var i = 0; i < that._special_names.length; i++) {
                 var special_name = that._special_names[i];
-
-                ichunks.push(that._specials[special_name].formatter(match));
+                if (typeof match[special_name] !== "undefined") {
+                    ichunks.push(that._specials[special_name].formatter(match));
+                    break;
+                }
             }
             extra_punct = "";
         }
         current_index = match.index + match[0].length;
     });
-    var last_text = extra_punct + text.substring(current_index);
+    var last_text = extra_punct + text.substr(current_index);
     if (last_text !== "" || ichunks.length === 0) {
         ichunks.push({ text: last_text });
     }
