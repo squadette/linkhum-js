@@ -20,6 +20,26 @@ exports.intermediate_from_text = function (text) {
             extra_punct = XRegExp.match(match.url, punctuation_regex);
             if (extra_punct) {
                 var url_no_punctuation = match.url.substring(0, match.url.length - extra_punct.length);
+                var unbalanced_part = "";
+                for (var i = 0; i < url_no_punctuation.length; i++) {
+                    switch (url_no_punctuation[i]) {
+                        case '(':
+                            unbalanced_part = ")" + unbalanced_part;
+                            break;
+
+                        case ')':
+                            if (unbalanced_part[0] === ")") {
+                                unbalanced_part = unbalanced_part.substring(1);
+                            }
+                            break;
+                    }
+                }
+                if (unbalanced_part) {
+                    if (unbalanced_part === extra_punct.substring(0, unbalanced_part.length)) {
+                        url_no_punctuation += unbalanced_part;
+                        extra_punct = extra_punct.substring(unbalanced_part.length);
+                    }
+                }
                 ichunks.push({ text: url_no_punctuation, href: url_no_punctuation });
             } else {
                 ichunks.push({ text: match.url, href: match.url });
