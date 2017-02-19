@@ -1,5 +1,5 @@
 {
-  "name": "linkhum-js",
+  "name": "linkhum",
   "version": "0.1.0",
   "description": "Readable URLs and micro-syntax for human text",
   "main": "index.js",
