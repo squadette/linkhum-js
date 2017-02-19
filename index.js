@@ -8,12 +8,12 @@ var punctuation_regex = XRegExp('[^\\P{Punctuation}#/&-]*$', 'u');
 function Linkhum(options) {
     var opt = options || {};
 
-    this._specials = opt.specials || {};
-    this._special_names = Object.keys(this._specials);
+    this._microsyntaxes = opt.microsyntax || {};
+    this._microsyntax_names = Object.keys(this._microsyntaxes);
 
     var that = this;
-    var regexes = [url_regex].concat(this._special_names.map(function (name) {
-        return XRegExp(that._specials[name].regexp);
+    var regexes = [url_regex].concat(this._microsyntax_names.map(function (name) {
+        return XRegExp(that._microsyntaxes[name].regexp);
     }));
     this._combined_regex = XRegExp.union(regexes);
 }
@@ -59,10 +59,12 @@ Linkhum.prototype.intermediate_from_text = function (text) {
                 ichunks.push({ text: match.url, href: match.url });
             }
         } else {
-            for (var i = 0; i < that._special_names.length; i++) {
-                var special_name = that._special_names[i];
-                if (typeof match[special_name] !== "undefined") {
-                    ichunks.push(that._specials[special_name].formatter(match));
+            for (var i = 0; i < that._microsyntax_names.length; i++) {
+                var microsyntax_name = that._microsyntax_names[i];
+                if (typeof match[microsyntax_name] !== "undefined") {
+                    var tmp = that._microsyntaxes[microsyntax_name].formatter(match);
+                    tmp.microsyntax = microsyntax_name;
+                    ichunks.push(tmp);
                     break;
                 }
             }
