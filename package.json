@@ -1,6 +1,6 @@
 {
   "name": "linkhum",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Readable URLs and micro-syntax for human text",
   "main": "index.js",
   "repository": "https://github.com/squadette/linkhum-js/",
