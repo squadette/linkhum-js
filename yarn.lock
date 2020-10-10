@@ -174,10 +174,10 @@ should-util@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/should-util/-/should-util-1.0.0.tgz#c98cda374aa6b190df8ba87c9889c2b4db620063"
 
-should@~12.0.0:
-  version "12.0.0"
-  resolved "https://registry.yarnpkg.com/should/-/should-12.0.0.tgz#846667cd241691a6509fff0820f44d39143ddcf7"
-  integrity sha512-KH4k3fjCizyfLCRBUpLOPXTi8WHJoluehIZsxVeIxlrSRFk4FgoZxjZXBlyXt4h9FdOi1j/y0SYJWmcrF0UYhA==
+should@~13.0.0:
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/should/-/should-13.0.1.tgz#8d9073832ff9437e066c982bd1e507938acb7b2e"
+  integrity sha512-PyGb++NcZXyHq1lK4Lv9JC2/qjRia1gsE6wrMEOpJX1t7bxEZlY0oYijSq7xgvp6rPJiH8DVvcmw/LWtFaw1vw==
   dependencies:
     should-equal "^2.0.0"
     should-format "^3.0.3"
