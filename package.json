@@ -10,7 +10,7 @@
     "xregexp": "^3.1.1"
   },
   "devDependencies": {
-    "mocha": "~7.0.0",
+    "mocha": "~7.1.0",
     "should": "~13.2.0"
   }
 }
